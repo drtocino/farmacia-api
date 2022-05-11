@@ -1,8 +1,10 @@
 const express = require('express');
 const app = express();
-const mongoose = require("./database/mongoose")
+const bcrypt = require('bcrypt');
+const mongoose = require("./database/mongoose");
 
 const Usuario = require("./database/models/usuario");
+const Producto = require('./database/models/producto');
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -17,6 +19,15 @@ app.use(express.json());
 
 app.get("/getUsuarios",(req,res) => {
     Usuario.find({})
+    .then((list) => {
+        res.send(list)
+    }).catch((error) => {
+        console.log(error);
+    })
+})
+
+app.get("/getProductos",(req,res) => {
+    Producto.find({})
     .then((list) => {
         res.send(list)
     }).catch((error) => {
