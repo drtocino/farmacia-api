@@ -6,7 +6,7 @@ const productoSchema = new mongoose.Schema({
     stock: {type: String},
     laboratorio: {type: String},
     descripcion: {type: String},
-    fechaVencimiento: {type: String},
+    fechaVencimiento: {type: Date},
     
 })
 

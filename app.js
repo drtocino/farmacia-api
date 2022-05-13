@@ -38,6 +38,8 @@ app.use(express.json());
 // user.save();
 // const user = new Usuario({ nombre: 'Maria',correo:"ejemplo@gmail.com",usuario: 'maria',clave: "87654321",rol: "cajero",imagen: "asdf.png",activo: false});
 // user.save();
+// const producto = new Producto({ nombre: 'Amoxicilina',precio:28,stock: 250,laboratorio: "Inti",descripcion: "Amoxicilina 350ml",fechaVencimiento: "2022-06-20"});
+// producto.save();
 
 app.get("/getUsuarios",(req,res) => {
     Usuario.find({})
