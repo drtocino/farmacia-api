@@ -1,6 +1,8 @@
 const express = require('express');
+const cors = require("cors");
 const app = express();
 const bcrypt = require('bcrypt');
+const session = require("express-session");
 const mongoose = require("./database/mongoose");
 
 const Usuario = require("./database/models/usuario");
@@ -13,8 +15,28 @@ app.use((req, res, next) => {
     res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
 });
+
+app.use(cors({
+    origin: ["http://localhost:4200"],
+    credentials: true,
+}))
+
+app.use(session({
+    secret: 'sesiones',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 600000,
+    }
+}))
+
 app.use(express.json());
 // const user = new Usuario({ nombre: 'Dilan',correo:"example@mail.com",usuario: 'dilan',clave: "12345678",rol: "admin",imagen: "asdf.png"});
+// user.save();
+
+// const user = new Usuario({ nombre: 'Raul',correo:"example@mail.com",usuario: 'raul',clave: "12345678",rol: "admin",imagen: "asdf.png"});
+// user.save();
+// const user = new Usuario({ nombre: 'Maria',correo:"ejemplo@gmail.com",usuario: 'maria',clave: "87654321",rol: "cajero",imagen: "asdf.png",activo: false});
 // user.save();
 
 app.get("/getUsuarios",(req,res) => {
@@ -36,8 +58,32 @@ app.get("/getProductos",(req,res) => {
 })
 
 app.post("/login",(req,res) => {
-    console.log(req.body);
-    res.send("Hola mundo");
+    //console.log(req.body);
+    Usuario.findOne({usuario: req.body.user}).then((resp) => {
+        console.log(resp)
+        if(resp){
+            if(resp.clave === req.body.pass){
+                req.session.nombre = resp.nombre;
+                console.log(req.session)
+                res.send({exists: true,passCorrect: true,nombre: resp.nombre});
+            }else{
+                res.send({exists: true,passCorrect:false});
+            }
+        }else{
+            res.send({exists: false,passCorrect: false})
+        }
+    }).catch((error) => {
+        console.log(error)
+    })
+})
+
+app.get("/login",(req,res) => {
+    console.log(req.session)
+    if(req.session.nombre){
+        res.send({nombre: req.session.nombre,logged: true})
+    }else{
+        res.send({nombre: '',logged: false})
+    }
 })
 
 app.listen(3001, () => {

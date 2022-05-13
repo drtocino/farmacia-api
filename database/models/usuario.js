@@ -6,6 +6,7 @@ const usuarioSchema = new mongoose.Schema({
     clave: {type: String},
     rol: {type: String},
     imagen: {type: String},
+    activo: {type: Boolean},
 })
 
 const Usuario = mongoose.model("usuario",usuarioSchema);
