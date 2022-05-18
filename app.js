@@ -59,6 +59,40 @@ app.get("/getProductos",(req,res) => {
     })
 })
 
+app.post("/postProducto",(req,res) => {
+    console.log(req.body)
+    const product = new Producto(req.body);
+    product.save()
+    .then((result) => {
+        res.send(result)
+    }).catch((error) => {
+        console.log(error);
+    })
+})
+
+app.put("/putProducto/:id",(req,res) => {
+    //console.log(req.body)
+    const nombre = req.body.nombre
+    const stock = req.body.stock
+    const precio = req.body.precio
+    Producto.updateOne({_id: req.params.id},req.body)
+    .then((result) => {
+        res.send(result)
+    }).catch((error) => {
+        console.log(error);
+    })
+})
+
+app.delete("/delProducto/:id",(req,res) => {
+    //console.log(req.body)
+    Producto.findByIdAndDelete(req.params.id)
+    .then((result) => {
+        res.send(result)
+    }).catch((error) => {
+        console.log(error);
+    })
+})
+
 app.post("/login",(req,res) => {
     //console.log(req.body);
     Usuario.findOne({usuario: req.body.user}).then((resp) => {
