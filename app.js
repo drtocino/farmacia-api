@@ -101,7 +101,7 @@ app.post("/login",(req,res) => {
             if(resp.clave === req.body.pass){
                 req.session.nombre = resp.nombre;
                 console.log(req.session)
-                res.send({exists: true,passCorrect: true,nombre: resp.nombre});
+                res.send({exists: true,passCorrect: true,nombre: resp.nombre,rol: resp.rol});
             }else{
                 res.send({exists: true,passCorrect:false});
             }
