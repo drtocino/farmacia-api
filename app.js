@@ -7,6 +7,7 @@ const mongoose = require("./database/mongoose");
 
 const Usuario = require("./database/models/usuario");
 const Producto = require('./database/models/producto');
+const Laboratorio = require('./database/models/laboratorio');
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -41,6 +42,8 @@ app.use(express.json());
 // const producto = new Producto({ nombre: 'Amoxicilina',precio:28,stock: 250,laboratorio: "Inti",descripcion: "Amoxicilina 350ml",fechaVencimiento: "2022-06-20"});
 // producto.save();
 
+// const laboratorio = new Laboratorio({ nombre: 'Inti',locacion: "La Paz, Viacha"});
+// laboratorio.save();
 app.get("/getUsuarios",(req,res) => {
     Usuario.find({})
     .then((list) => {
@@ -59,10 +62,30 @@ app.get("/getProductos",(req,res) => {
     })
 })
 
+app.get("/getLaboratorios",(req,res) => {
+    Laboratorio.find({})
+    .then((list) => {
+        res.send(list)
+    }).catch((error) => {
+        console.log(error);
+    })
+})
+
 app.post("/postProducto",(req,res) => {
     console.log(req.body)
     const product = new Producto(req.body);
     product.save()
+    .then((result) => {
+        res.send(result)
+    }).catch((error) => {
+        console.log(error);
+    })
+})
+
+app.post("/postLaboratorio",(req,res) => {
+    console.log(req.body)
+    const lab = new Laboratorio(req.body);
+    lab.save()
     .then((result) => {
         res.send(result)
     }).catch((error) => {
@@ -83,9 +106,29 @@ app.put("/putProducto/:id",(req,res) => {
     })
 })
 
+app.put("/putLaboratorio/:id",(req,res) => {
+    //console.log(req.body)
+    Laboratorio.updateOne({_id: req.params.id},req.body)
+    .then((result) => {
+        res.send(result)
+    }).catch((error) => {
+        console.log(error);
+    })
+})
+
 app.delete("/delProducto/:id",(req,res) => {
     //console.log(req.body)
-    Producto.findByIdAndDelete(req.params.id)
+    Laboratorio.findByIdAndDelete(req.params.id)
+    .then((result) => {
+        res.send(result)
+    }).catch((error) => {
+        console.log(error);
+    })
+})
+
+app.delete("/delLaboratorio/:id",(req,res) => {
+    //console.log(req.body)
+    Laboratorio.findByIdAndDelete(req.params.id)
     .then((result) => {
         res.send(result)
     }).catch((error) => {
